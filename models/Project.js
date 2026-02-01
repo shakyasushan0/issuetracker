@@ -27,8 +27,13 @@ const projectSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
+projectSchema.pre("save", function () {
+  if (!this.members.includes(this.createdBy)) {
+    this.members.push(this.createdBy);
+  }
+});
 const Project = mongoose.model("Project", projectSchema);
 export default Project;
