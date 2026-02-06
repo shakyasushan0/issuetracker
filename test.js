@@ -1,6 +1,2 @@
-const req = {};
-req.user = {
-  name: "John",
-  email: "john",
-};
-console.log(req);
+const members = [1, 2, 3, 4];
+2;
