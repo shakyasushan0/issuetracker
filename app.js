@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./db/connect.js";
 import userRouter from "./routes/user.router.js";
 import projectRouter from "./routes/project.router.js";
+import issueRouter from "./routes/issue.router.js";
 
 const app = express();
 app.use(express.json());
@@ -14,3 +15,4 @@ connectDB().then(() => {
 
 app.use("/api/auth", userRouter);
 app.use("/api/projects", projectRouter);
+app.use("/api/issues", issueRouter);

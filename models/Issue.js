@@ -12,7 +12,7 @@ const issueSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["TODO", "IN-PROGRESS", "VALIDATION", "COMPLETED"],
+      enum: ["TODO", "IN-PROGRESS", "REVIEW", "BLOCKED", "COMPLETED"],
       uppercase: true,
       default: "TODO",
     },
