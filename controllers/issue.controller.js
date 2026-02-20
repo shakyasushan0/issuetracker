@@ -1,6 +1,14 @@
 import Issue from "../models/Issue.js";
 import Project from "../models/Project.js";
 import ISSUE_STATUS_FLOW from "../utils/issueStatusFlow.js";
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+
+cloudinary.config({
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+});
 
 const createIssue = async (req, res) => {
   const { title, description, project, assignee, priority, storyPoint } =
@@ -83,6 +91,21 @@ const reportedByMe = async (req, res) => {
     .populate("reportedBy", "name email -_id");
   res.send(issues);
 };
+
+const updateAttachment = async (req, res) => {
+  const id = req.params.id;
+  const issue = await Issue.findById(id);
+  if (!issue) res.status(404).send({ error: "Issue not found!" });
+  const response = await cloudinary.uploader.upload(req.file.path, {
+    folder: "issue_attachments",
+    resource_type: "auto",
+  });
+  fs.unlinkSync(req.file.path);
+  issue.attachment = response.secure_url;
+  await issue.save();
+  res.send({ message: "Attachment added!" });
+};
+
 export {
   createIssue,
   getIssuesByProject,
@@ -90,4 +113,5 @@ export {
   updateIssueStatus,
   getMyIssues,
   reportedByMe,
+  updateAttachment,
 };
